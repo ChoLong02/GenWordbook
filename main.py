@@ -4,6 +4,9 @@ import pprint
 import requests
 from bs4 import BeautifulSoup
 import nltk
+import numpy as np
+from PIL import Image
+from wordcloud import WordCloud
 
 # nltk.download('punkt')
 # nltk.download('stopwords')
@@ -36,7 +39,10 @@ for i, sentence in enumerate(sentence_list):
 
     # 2-2.불용어(StopWord) 제거
     stopwords = nltk.corpus.stopwords.words('english')
+    stopwords.append('..')
     stopwords.append('...')
+    stopwords.append('.....')
+    stopwords.append('``')
 
     clean_list = []
     for token in token_list:
@@ -52,13 +58,15 @@ for i, sentence in enumerate(sentence_list):
     # 2-4.(')포함 된 Token 제거
     clean_filter_list = list(filter(lambda x: "'" not in x, len_filter_list))
     print('5 >>>>> {}'.format(clean_filter_list))
-    words.extend(clean_filter_list)
+
+
+    # 2-5.('-')포함 된 Token 제거
+    clean_list = list(filter(lambda x: "-" not in x, clean_filter_list))
+    print('6 >>>>>> {}'.format(clean_list))
+    words.extend(clean_list)
+
 
 print(words)
-
-
-
-
 
 
 
