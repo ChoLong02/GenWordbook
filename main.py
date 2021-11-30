@@ -17,6 +17,7 @@ from wordcloud import WordCloud
 # conda install -c anaconda pandas
 # conda install -c conda-forge wordcloud
 
+
 ####################
 # 1.미드 대본 수집 #
 ####################
@@ -33,6 +34,7 @@ for i, sentence in enumerate(sentence_list):
     start_idx = sentence_txt.find(':')
     clean_sentence = sentence_txt[start_idx+2:]
     pprint.pprint('1 > {}'.format(clean_sentence))
+
 
     #########################
     # 2.단어만 추출(전처리) #
@@ -119,20 +121,31 @@ for word in unique_words:
     if word_mean_list != None:
         total_dict_list.append(word_mean_list)
 
+pprint.pprint(total_dict_list)
+
 
 ##################
 # 5.Excel 저장 #
 ##################
 col_names = ['word', 'mean_1', 'mean_2', 'mean_3', 'mean_4', 'mean_5']
 df_dict = pd.DataFrame(total_dict_list, columns=col_names)
+print(df_dict)
 df_dict.to_excel('words.xlsx', index=False)
-
-# import pandas as pd
-# import numpy as np
-# from PIL import Image
-# from wordcloud import WordCloud
 
 
 #######################
 # 6.시각화(WordCloud) #
 #######################
+# mask 만들기
+circle_mask = np.array(Image.open("./imgs/circle.png"))
+cnu_mask = np.array(Image.open("./imgs/cnu_text.png"))
+wc = WordCloud(mask=cnu_mask,
+               background_color='white',
+               width=500,
+               height=500,
+               max_words=200,
+               max_font_size=100)
+
+fd_names = nltk.FreqDist(words)
+wc.generate_from_frequencies(fd_names)
+wc.to_file('wordcloud2.png')
